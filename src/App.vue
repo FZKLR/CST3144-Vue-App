@@ -169,7 +169,7 @@ function submitOrder() {
 
 <template>
   <main class="container">
-    <header class="header">
+    <header class="app-hero">
       <h1>After-School Lessons</h1>
       <button
         type="button"
@@ -186,7 +186,7 @@ function submitOrder() {
 
     <!-- Lessons Page -->
     <section v-else-if="!showCart">
-      <div class="controls">
+      <div class="controls-bar">
         <label>
           Sort by:
           <select v-model="sortBy">
@@ -207,7 +207,7 @@ function submitOrder() {
       </div>
 
       <div class="lesson-grid">
-        <article v-for="lesson in sortedLessons" :key="lesson.id" class="card">
+        <article v-for="lesson in sortedLessons" :key="lesson.id" class="lesson-card">
           <img
             v-if="lesson.image"
             :src="lesson.image.startsWith('http') ? lesson.image : `${API_BASE}/images/${lesson.image}`"
@@ -230,7 +230,7 @@ function submitOrder() {
     </section>
 
     <!-- Shopping Cart & Checkout Page -->
-    <section v-else class="cart-section">
+    <section v-else class="cart-panel">
       <h2>Shopping Cart</h2>
       <ul>
         <li v-for="(item, index) in cart" :key="item.lessonId" class="cart-item">
@@ -239,7 +239,7 @@ function submitOrder() {
         </li>
       </ul>
 
-      <div class="checkout-box">
+      <div class="checkout-panel">
         <h3>Checkout</h3>
         <label>
           Name (letters only):
