@@ -56,17 +56,24 @@ function fetchLessons(query = '') {
       return response.json();
     })
     .then((data) => {
-      lessons.value = data.map((item) => ({
-        ...item,
-        id: item._id || item.id
-      }));
-      loading.value = false;
+      lessons.value = Array.isArray(data)
+        ? data.map((item) => ({
+            ...item,
+            id: item._id || item.id
+          }))
+        : [];
     })
     .catch((err) => {
       errorMessage.value = `Failed to load lessons: ${err.message}`;
+    })
+    .finally(() => {
       loading.value = false;
     });
 }
+
+onMounted(() => {
+  fetchLessons();
+});
 
 function onSearchInput() {
   clearTimeout(searchTimer);
