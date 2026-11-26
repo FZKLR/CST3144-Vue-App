@@ -86,12 +86,6 @@ onMounted(() => {
   fetchLessons('', true);
 });
 
-function onSearchInput() {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => {
-    fetchLessons(searchQuery.value);
-  }, 200);
-}
 
 function addToCart(lesson) {
   if (lesson.space <= 0) return;
