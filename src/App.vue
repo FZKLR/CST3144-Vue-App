@@ -199,6 +199,16 @@ function submitOrder() {
     <section v-else-if="!showCart">
       <div class="controls-bar">
         <label>
+          Search:
+          <input
+            type="text"
+            v-model="searchQuery"
+            v-on:input="onSearchInput"
+            placeholder="Search topic, location, price, spaces..."
+          />
+        </label>
+
+        <label>
           Sort by:
           <select v-model="sortBy">
             <option value="subject">Subject</option>
@@ -214,16 +224,6 @@ function submitOrder() {
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
-        </label>
-
-        <label>
-          Search:
-          <input
-            type="text"
-            v-model="searchQuery"
-            v-on:input="onSearchInput"
-            placeholder="Search topic, location, price, spaces..."
-          />
         </label>
       </div>
 
