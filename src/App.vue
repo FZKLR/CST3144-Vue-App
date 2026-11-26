@@ -39,8 +39,10 @@ const sortedLessons = computed(() => {
 const searchQuery = ref('');
 let searchTimer = null;
 
-function fetchLessons(query = '') {
-  loading.value = true;
+function fetchLessons(query = '', showFullLoader = false) {
+  if (showFullLoader) {
+    loading.value = true;
+  }
   errorMessage.value = '';
 
   const trimmed = query.trim();
@@ -67,12 +69,21 @@ function fetchLessons(query = '') {
       errorMessage.value = `Failed to load lessons: ${err.message}`;
     })
     .finally(() => {
-      loading.value = false;
+      if (showFullLoader) {
+        loading.value = false;
+      }
     });
 }
 
+function onSearchInput() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    fetchLessons(searchQuery.value, false);
+  }, 200);
+}
+
 onMounted(() => {
-  fetchLessons();
+  fetchLessons('', true);
 });
 
 function onSearchInput() {
