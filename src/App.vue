@@ -64,6 +64,45 @@ const sortedLessons = computed(() => {
   });
 });
 
+const searchQuery = ref('');
+let searchTimer = null;
+
+function fetchLessons(query = '') {
+  loading.value = true;
+  errorMessage.value = '';
+
+  const trimmed = query.trim();
+  const url = trimmed
+    ? `${API_BASE}/search?q=${encodeURIComponent(trimmed)}`
+    : `${API_BASE}/lessons`;
+
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      lessons.value = data.map((item) => ({
+        ...item,
+        id: item._id || item.id
+      }));
+      loading.value = false;
+    })
+    .catch((err) => {
+      errorMessage.value = `Failed to load lessons: ${err.message}`;
+      loading.value = false;
+    });
+}
+
+function onSearchInput() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    fetchLessons(searchQuery.value);
+  }, 200);
+}
+
 function addToCart(lesson) {
   if (lesson.space <= 0) return;
 
@@ -203,6 +242,16 @@ function submitOrder() {
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
+        </label>
+
+        <label>
+          Search:
+          <input
+            type="text"
+            v-model="searchQuery"
+            v-on:input="onSearchInput"
+            placeholder="Search topic, location, price, spaces..."
+          />
         </label>
       </div>
 
