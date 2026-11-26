@@ -20,34 +20,6 @@ const customerName = ref('');
 const customerPhone = ref('');
 const checkoutMessage = ref('');
 
-function fetchLessons() {
-  loading.value = true;
-  errorMessage.value = '';
-
-  fetch(`${API_BASE}/lessons`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      lessons.value = data.map((item) => ({
-        ...item,
-        id: item._id || item.id
-      }));
-      loading.value = false;
-    })
-    .catch((err) => {
-      errorMessage.value = `Failed to load lessons: ${err.message}`;
-      loading.value = false;
-    });
-}
-
-onMounted(() => {
-  fetchLessons();
-});
-
 const sortedLessons = computed(() => {
   const list = [...lessons.value];
   const attr = sortBy.value;
